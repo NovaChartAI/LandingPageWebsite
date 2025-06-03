@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaChart - Smarter Notes. Better Care.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+            color: #1f2937; /* Tailwind gray-800 */
+        }
+        .hero-section {
+            background-color: #ffffff; /* White background */
+            color: #1f2937; /* Dark text for contrast */
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* bold */
+            margin-bottom: 1.5rem; /* mb-6 */
+            text-align: center;
+        }
+        .countdown-item {
+            background-color: rgba(0, 0, 0, 0.05); 
+            backdrop-filter: blur(5px);
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem 1rem; 
+            margin: 0.25rem; 
+            text-align: center;
+            min-width: 70px; 
+            color: #1f2937; 
+        }
+        .countdown-number {
+            font-size: 2rem; 
+            font-weight: 700; 
+            line-height: 1;
+        }
+        .countdown-label {
+            font-size: 0.75rem; 
+            text-transform: uppercase;
+            opacity: 0.7; 
+        }
+        .nav-link {
+            /* text-lg and px-4 for more space */
+            @apply px-4 py-2 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors;
+        }
+        .nav-link-active {
+            @apply bg-blue-500 text-white hover:bg-blue-600;
+        }
+        .ui-image-container {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            border-radius: 0.75rem; /* rounded-xl */
+            overflow: hidden;
+        }
+        .btn {
+            @apply px-6 py-3 rounded-lg font-semibold transition-colors duration-300;
+        }
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white;
+        }
+        .btn-secondary {
+            @apply bg-gray-700 hover:bg-gray-800 text-white;
+        }
+        .btn-contact-email {
+            @apply inline-block bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-300 shadow-md;
+        }
+        .img-placeholder {
+            background-color: #e5e7eb; /* Tailwind gray-200 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280; /* Tailwind gray-500 */
+            font-size: 0.875rem; /* text-sm */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20"> 
+                <div class="flex items-center">
+                    <img 
+                        id="logo-header"
+                        class="h-16 w-auto" /* Increased logo height from h-14 to h-16 */
+                        src="https://i.postimg.cc/nryCDy7D/Chat-GPT-Image-Jun-1-2025-10-16-30-PM.png" 
+                        alt="NovaChart Logo"
+                        onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder h-16 w-44\'>Logo Error</div>';" /* Adjusted placeholder height */
+                    >
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6"> 
+                        <a href="#home" class="nav-link nav-link-active">Home</a>
+                        <a href="#about" class="nav-link">About</a>
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> 
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block nav-link nav-link-active text-center text-lg">Home</a>
+                <a href="#about" class="block nav-link text-center text-lg">About</a>
+                <a href="#features" class="block nav-link text-center text-lg">Features</a>
+                <a href="#contact" class="block nav-link text-center text-lg">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="hero-section py-20 md:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-left">
+                    <img 
+                        id="logo-hero"
+                        class="h-16 sm:h-20 w-auto mx-auto md:mx-0 mb-8"
+                        src="https://i.postimg.cc/nryCDy7D/Chat-GPT-Image-Jun-1-2025-10-16-30-PM.png" 
+                        alt="NovaChart Logo"
+                        onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder h-20 w-48 mx-auto md:mx-0 mb-8 text-gray-700\'>Logo Error</div>';"
+                    >
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+                        Smarter Notes. <span class="block sm:inline text-blue-600">Better Care.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl md:text-2xl mb-8 max-w-2xl mx-auto md:mx-0 text-gray-700">
+                        Our AI-powered app records patient-doctor interactions and instantly generates accurate, comprehensive clinical notes. Focus on your patients, we'll handle the paperwork.
+                    </p>
+        
+                    <div class="mb-10">
+                        <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 text-center md:text-left">Launching In:</h2>
+                        <div id="countdown" class="flex flex-wrap justify-center md:justify-start items-center">
+                            Loading countdown...
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#features" class="btn btn-primary text-lg w-full sm:w-auto">Explore Features</a>
+                        <a href="#contact" class="btn bg-gray-200 text-gray-800 hover:bg-gray-300 text-lg w-full sm:w-auto">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 md:mt-0">
+                    <div class="ui-image-container">
+                        <img 
+                            id="ui-image-1"
+                            src="https://i.postimg.cc/R0tRjmCW/Screenshot-2025-06-01-at-10-02-02-PM.png" 
+                            alt="App UI Screenshot 1 - Patient Interaction Recording" 
+                            class="w-full h-auto object-cover"
+                            onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder w-full h-64\'>UI Image 1 Error</div>';"
+                        >
+                    </div>
+                    <div class="ui-image-container">
+                        <img 
+                            id="ui-image-2"
+                            src="https://i.postimg.cc/PrK1cxm3/Screenshot-2025-06-01-at-10-00-41-PM.png" 
+                            alt="App UI Screenshot 2 - Generated Notes" 
+                            class="w-full h-auto object-cover"
+                            onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder w-full h-64\'>UI Image 2 Error</div>';"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-16 md:py-24 bg-gray-50"> 
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title text-gray-800">About NovaChart</h2>
+            <div class="max-w-3xl mx-auto text-center text-gray-600 text-lg space-y-6">
+                <p>
+                    At NovaChart, we believe every minute spent by a healthcare specialist is invaluable. That's why we're dedicated to transforming the way clinical documentation is handled. Too often, skilled professionals are bogged down by administrative tasks, diverting precious time and energy away from direct patient interaction and care.
+                </p>
+                <p>
+                    Our mission is to restore that balance. By leveraging cutting-edge AI, NovaChart empowers clinicians with intelligent tools that seamlessly record patient-doctor interactions and instantly generate accurate, comprehensive clinical notes. This not only streamlines workflows and reduces the burden of paperwork but also helps combat burnout, allowing healthcare providers to focus on what they do best: delivering exceptional patient care.
+                </p>
+                <p>
+                    We are committed to upholding the highest standards of privacy, security, and accuracy, ensuring our solution integrates smoothly and reliably into the demanding healthcare environment. NovaChart is more than just an app; it's a partner in enhancing the quality and efficiency of healthcare for everyone.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title text-gray-800">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <svg class="w-12 h-12 text-blue-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.014A7.962 7.962 0 0112 2c2.21 0 4.207.896 5.657 2.343A8 8 0 0117.657 18.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path></svg>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">AI-Powered Transcription</h3>
+                    <p class="text-gray-600">Real-time, accurate voice-to-text conversion of patient encounters.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                     <svg class="w-12 h-12 text-blue-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Intelligent Summarization</h3>
+                    <p class="text-gray-600">Automatically generates structured clinical notes from conversations.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <svg class="w-12 h-12 text-blue-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Secure & Compliant</h3>
+                    <p class="text-gray-600">Built with HIPAA-level security and data privacy at its core.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="py-16 md:py-24 bg-blue-600 text-white"> 
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="section-title text-white">Get In Touch</h2>
+            <p class="text-blue-100 text-lg mb-10 max-w-xl mx-auto"> 
+                Have questions, need support, or want to learn more about partnership opportunities? We'd love to hear from you!
+            </p>
+            <a href="mailto:support@docai.us" class="btn-contact-email">
+                Email Us: support@docai.us
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <img 
+                id="logo-footer"
+                class="h-12 sm:h-16 w-auto mx-auto mb-4 opacity-75"
+                src="https://i.postimg.cc/rsFcnMX4/Screenshot-2025-06-01-at-10-33-57-PM.png" 
+                alt="NovaChart Logo"
+                onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder h-16 w-44 mx-auto mb-4 text-gray-400\'>Logo Error</div>';"
+            >
+            <p>&copy; <span id="currentYear"></span> NovaChart. All rights reserved.</p>
+            <p class="text-sm mt-2">Revolutionizing clinical documentation with AI.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Countdown Timer ---
+        const countdownElement = document.getElementById('countdown');
+        const countdownDate = new Date(2025, 5, 11, 0, 0, 0).getTime(); // June 11, 2025
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (countdownElement) { // Check if element exists
+                if (distance < 0) {
+                    countdownElement.innerHTML = "<div class='text-xl md:text-2xl font-bold p-3 md:p-4 bg-green-500 text-white rounded-lg text-center w-full'>We've Launched!</div>";
+                    if(countdownInterval) clearInterval(countdownInterval);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = \`
+                    <div class="countdown-item">
+                        <div class="countdown-number">\${days}</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">\${hours}</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">\${minutes}</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">\${seconds}</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                \`;
+            } else {
+                // console.warn("Countdown element (id='countdown') not found in the DOM."); // Log a warning if not found
+                if(countdownInterval) clearInterval(countdownInterval); // Stop interval if element is missing
+            }
+        }
+        
+        let countdownInterval; 
+        // Ensure DOM is ready before trying to access elements and start interval
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Re-fetch element inside DOMContentLoaded to be sure it's available
+            const localCountdownElement = document.getElementById('countdown');
+            if (localCountdownElement) { 
+                 countdownInterval = setInterval(updateCountdown, 1000);
+                 updateCountdown(); // Initial call
+            } else {
+                console.warn("Countdown element (id='countdown') not found after DOMContentLoaded.");
+            }
+        });
+
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        // Check if mobileMenuButton exists before adding event listener
+        if (mobileMenuButton && mobileMenu) {
+            const hamburgerIcon = mobileMenuButton.querySelector('svg:first-child');
+            const closeIcon = mobileMenuButton.querySelector('svg:last-child');
+
+            mobileMenuButton.addEventListener('click', () => {
+                const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+                mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                mobileMenu.classList.toggle('hidden');
+                if (hamburgerIcon && closeIcon) {
+                    hamburgerIcon.classList.toggle('hidden');
+                    closeIcon.classList.toggle('hidden');
+                }
+            });
+            
+            const mobileNavLinks = mobileMenu.querySelectorAll('a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenuButton.click(); 
+                    }
+                });
+            });
+        }
+
+
+        // --- Smooth Scrolling & Active Nav Link ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                const header = document.querySelector('header');
+                
+                if (targetElement && header) {
+                    const headerOffset = header.offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+        
+        const sections = document.querySelectorAll('section[id]');
+        const desktopNavLinks = document.querySelectorAll('header nav a');
+        const allMobileNavLinks = document.querySelectorAll('#mobile-menu a'); // Ensure mobileMenu exists
+
+        function changeNavOnScroll() {
+            let current = 'home'; 
+            const header = document.querySelector('header');
+            if (!header) return; // Exit if header not found
+            
+            const headerHeight = header.offsetHeight;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerHeight - 70; 
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            desktopNavLinks.forEach(link => {
+                link.classList.remove('nav-link-active');
+                if (link.getAttribute('href') === \`#\${current}\`) {
+                    link.classList.add('nav-link-active');
+                }
+            });
+            if (mobileMenu) { // Check if mobileMenu exists before trying to query its links
+                 allMobileNavLinks.forEach(link => {
+                    link.classList.remove('nav-link-active');
+                     if (link.getAttribute('href') === \`#\${current}\`) {
+                        link.classList.add('nav-link-active');
+                    }
+                });
+            }
+        }
+        window.addEventListener('scroll', changeNavOnScroll);
+        // Call on load as well, but ensure it's after DOM is ready or elements might not be found
+        document.addEventListener('DOMContentLoaded', changeNavOnScroll);
+
+
+        // --- Set Current Year in Footer ---
+        const currentYearElement = document.getElementById('currentYear');
+        if (currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
+
+    </script>
+</body>
+</html>
