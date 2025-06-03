@@ -42,6 +42,18 @@
             text-transform: uppercase;
             opacity: 0.7; 
         }
+        /* Diagnostic style for countdown if JS fails to populate it */
+        #countdown:empty {
+            background-color: #fecaca; /* Tailwind red-200 */
+            border: 1px solid #f87171; /* Tailwind red-400 */
+            padding: 1rem;
+            min-height: 50px; /* Ensure it's visible */
+            text-align: center;
+            color: #b91c1c; /* Tailwind red-700 */
+        }
+        #countdown:empty::before {
+            content: "Countdown should be here. If you see this, JavaScript might not be running correctly.";
+        }
         .nav-link {
             /* text-lg and px-4 for more space */
             @apply px-4 py-2 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors;
@@ -80,14 +92,14 @@
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20"> 
+            <div class="flex items-center justify-between h-28"> 
                 <div class="flex items-center">
                     <img 
                         id="logo-header"
-                        class="h-16 w-auto" /* Increased logo height from h-14 to h-16 */
+                        class="h-24 w-auto" /* Significantly increased logo height */
                         src="https://i.postimg.cc/nryCDy7D/Chat-GPT-Image-Jun-1-2025-10-16-30-PM.png" 
                         alt="NovaChart Logo"
-                        onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder h-16 w-44\'>Logo Error</div>';" /* Adjusted placeholder height */
+                        onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'img-placeholder h-24 w-auto text-xs p-2\'>Logo Error</div>';" /* Adjusted placeholder height */
                     >
                 </div>
                 <div class="hidden md:block">
@@ -142,8 +154,7 @@
                     <div class="mb-10">
                         <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 text-center md:text-left">Launching In:</h2>
                         <div id="countdown" class="flex flex-wrap justify-center md:justify-start items-center">
-                            Loading countdown...
-                        </div>
+                            </div>
                     </div>
                     
                     <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
@@ -244,14 +255,16 @@
 
     <script>
         // --- Countdown Timer ---
-        const countdownElement = document.getElementById('countdown');
+        // const countdownElement = document.getElementById('countdown'); // Declared globally for access in updateCountdown
         const countdownDate = new Date(2025, 5, 11, 0, 0, 0).getTime(); // June 11, 2025
+        let countdownInterval;  // Declare interval variable globally
 
         function updateCountdown() {
+            const countdownElement = document.getElementById('countdown'); // Get element inside function to ensure it's fresh
             const now = new Date().getTime();
             const distance = countdownDate - now;
 
-            if (countdownElement) { // Check if element exists
+            if (countdownElement) { 
                 if (distance < 0) {
                     countdownElement.innerHTML = "<div class='text-xl md:text-2xl font-bold p-3 md:p-4 bg-green-500 text-white rounded-lg text-center w-full'>We've Launched!</div>";
                     if(countdownInterval) clearInterval(countdownInterval);
@@ -282,21 +295,27 @@
                     </div>
                 \`;
             } else {
-                // console.warn("Countdown element (id='countdown') not found in the DOM."); // Log a warning if not found
-                if(countdownInterval) clearInterval(countdownInterval); // Stop interval if element is missing
+                // This console log helps in debugging if the element is not found
+                // console.warn("Debug: Countdown element (id='countdown') not found in updateCountdown.");
+                if(countdownInterval) clearInterval(countdownInterval); 
             }
         }
         
-        let countdownInterval; 
-        // Ensure DOM is ready before trying to access elements and start interval
         document.addEventListener('DOMContentLoaded', (event) => {
-            // Re-fetch element inside DOMContentLoaded to be sure it's available
             const localCountdownElement = document.getElementById('countdown');
             if (localCountdownElement) { 
-                 countdownInterval = setInterval(updateCountdown, 1000);
-                 updateCountdown(); // Initial call
+                 // Clear any :empty styling once JS is ready to take over
+                localCountdownElement.style.backgroundColor = '';
+                localCountdownElement.style.border = '';
+                localCountdownElement.style.padding = '';
+                localCountdownElement.style.minHeight = '';
+                localCountdownElement.style.color = '';
+
+                countdownInterval = setInterval(updateCountdown, 1000);
+                updateCountdown(); // Initial call
             } else {
-                console.warn("Countdown element (id='countdown') not found after DOMContentLoaded.");
+                // This console log helps in debugging if the element is not found even after DOM load
+                // console.warn("Debug: Countdown element (id='countdown') not found after DOMContentLoaded.");
             }
         });
 
@@ -304,7 +323,6 @@
         // --- Mobile Menu Toggle ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        // Check if mobileMenuButton exists before adding event listener
         if (mobileMenuButton && mobileMenu) {
             const hamburgerIcon = mobileMenuButton.querySelector('svg:first-child');
             const closeIcon = mobileMenuButton.querySelector('svg:last-child');
@@ -335,6 +353,9 @@
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
+                // Ensure targetId is not just "#"
+                if (targetId === "#") return; 
+                
                 const targetElement = document.querySelector(targetId);
                 const header = document.querySelector('header');
                 
@@ -347,18 +368,22 @@
                         top: offsetPosition,
                         behavior: "smooth"
                     });
+                } else if (targetElement) { // Fallback if header isn't found (though unlikely)
+                     window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: "smooth"
+                    });
                 }
             });
         });
         
         const sections = document.querySelectorAll('section[id]');
         const desktopNavLinks = document.querySelectorAll('header nav a');
-        const allMobileNavLinks = document.querySelectorAll('#mobile-menu a'); // Ensure mobileMenu exists
-
+        
         function changeNavOnScroll() {
             let current = 'home'; 
             const header = document.querySelector('header');
-            if (!header) return; // Exit if header not found
+            if (!header) return; 
             
             const headerHeight = header.offsetHeight;
 
@@ -375,7 +400,11 @@
                     link.classList.add('nav-link-active');
                 }
             });
-            if (mobileMenu) { // Check if mobileMenu exists before trying to query its links
+
+            // Mobile nav link update (ensure mobileMenu is defined and accessible)
+            const mobileMenuForScroll = document.getElementById('mobile-menu');
+            if (mobileMenuForScroll) {
+                const allMobileNavLinks = mobileMenuForScroll.querySelectorAll('a');
                  allMobileNavLinks.forEach(link => {
                     link.classList.remove('nav-link-active');
                      if (link.getAttribute('href') === \`#\${current}\`) {
@@ -385,7 +414,6 @@
             }
         }
         window.addEventListener('scroll', changeNavOnScroll);
-        // Call on load as well, but ensure it's after DOM is ready or elements might not be found
         document.addEventListener('DOMContentLoaded', changeNavOnScroll);
 
 
